@@ -64,16 +64,22 @@ export default function Home() {
       />
 
       {/* Theme toggle */}
-      <button
-        onClick={() => setCyber(!cyber)}
-        className={`fixed top-4 right-4 z-50 px-4 py-2 rounded-full shadow-md font-medium ${
-          cyber
-            ? "bg-pink-500 hover:bg-purple-500 text-white"
-            : "bg-indigo-600 hover:bg-indigo-700 text-white"
-        }`}
-      >
-        {cyber ? "Normal Theme" : "Cyberpunk Mode"}
-      </button>
+     <button
+  onClick={() => setCyber(!cyber)}
+  className={`fixed top-3 right-3 z-50 
+    px-3 py-1.5 text-xs sm:text-sm 
+    rounded-full shadow-md font-medium 
+    backdrop-blur-md transition 
+    ${
+      cyber
+        ? "bg-pink-500/90 hover:bg-purple-500 text-white"
+        : "bg-indigo-600/90 hover:bg-indigo-700 text-white"
+    }
+  `}
+>
+  {cyber ? "Normal" : "Cyber"}
+</button>
+
 
       {/* HERO */}
       <section className="relative z-10 max-w-6xl mx-auto min-h-screen grid md:grid-cols-2 gap-12 items-center px-6">
