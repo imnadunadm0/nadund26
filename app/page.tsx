@@ -1,8 +1,10 @@
 "use client";
 
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import Reveal from "./components/Reveal";
+import LinkedInBadge from "./components/LinkedInBadge";
 
-/* ---------- IMAGE SETS ---------- */
 const normalImages = [
   "/images/photo5.jpeg",
   "/images/photo2.jpeg",
@@ -20,31 +22,51 @@ const cyberImages = [
 export default function Home() {
   const [cyber, setCyber] = useState(false);
 
-  const images = cyber ? cyberImages : normalImages;
-
-  /* Load theme */
   useEffect(() => {
     const saved = localStorage.getItem("cyber");
     if (saved) setCyber(saved === "true");
   }, []);
 
-  /* Save theme */
   useEffect(() => {
     localStorage.setItem("cyber", String(cyber));
   }, [cyber]);
 
+  /* Apple-style scroll effects */
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const blobY = useTransform(scrollYProgress, [0, 1], [0, -180]);
+
+  const images = cyber ? cyberImages : normalImages;
+
   return (
     <main
-      className={`min-h-screen transition-all duration-1000 ${
+      className={`min-h-screen transition-all duration-1000 relative ${
         cyber
           ? "bg-gradient-to-br from-purple-900 via-pink-900 to-indigo-900 text-white"
           : "bg-gradient-to-br from-white via-gray-50 to-gray-100 text-gray-900"
       }`}
     >
-      {/* THEME TOGGLE */}
+      {/* Scroll progress bar */}
+      <motion.div
+        style={{ scaleX: progress }}
+        className={`fixed top-0 left-0 z-50 h-1 w-full origin-left ${
+          cyber ? "bg-pink-400" : "bg-indigo-600"
+        }`}
+      />
+
+      {/* Soft parallax blob */}
+      <motion.div
+        aria-hidden
+        style={{ y: blobY }}
+        className={`pointer-events-none fixed -top-24 -right-24 z-0 h-[420px] w-[420px] rounded-full blur-3xl opacity-40 ${
+          cyber ? "bg-pink-500" : "bg-indigo-300"
+        }`}
+      />
+
+      {/* Theme toggle */}
       <button
         onClick={() => setCyber(!cyber)}
-        className={`fixed top-4 right-4 z-50 px-4 py-2 rounded-full font-medium shadow-md transition ${
+        className={`fixed top-4 right-4 z-50 px-4 py-2 rounded-full shadow-md font-medium ${
           cyber
             ? "bg-pink-500 hover:bg-purple-500 text-white"
             : "bg-indigo-600 hover:bg-indigo-700 text-white"
@@ -54,154 +76,154 @@ export default function Home() {
       </button>
 
       {/* HERO */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center min-h-screen px-6">
-        {/* LEFT */}
-        <div className="space-y-6 text-center md:text-left">
-          <h1
-            className={`text-4xl md:text-6xl font-bold ${
-              cyber ? "text-pink-400 cyber-font cyber-glow" : ""
-            }`}
-          >
+      <section className="relative z-10 max-w-6xl mx-auto min-h-screen grid md:grid-cols-2 gap-12 items-center px-6">
+        <Reveal className="space-y-6 text-center md:text-left">
+          <h1 className={`text-4xl md:text-6xl font-bold ${cyber ? "text-pink-400" : ""}`}>
             Nadun Pasindu Dhananjaya
           </h1>
 
-          <p className={cyber ? "text-purple-300 cyber-font" : "text-gray-500"}>
+          <p className={cyber ? "text-purple-300" : "text-gray-500"}>
             aka Nadun ADM
           </p>
 
-          <h2
-            className={`text-xl md:text-2xl ${
-              cyber ? "text-purple-400 cyber-font" : "text-indigo-600"
-            }`}
-          >
+          <h2 className={cyber ? "text-purple-300 text-xl" : "text-indigo-600 text-xl"}>
             Computer Hardware & Network Technician
           </h2>
 
-          <p
-            className={`text-lg leading-relaxed ${
-              cyber ? "text-purple-200 cyber-font" : "text-gray-700"
-            }`}
-          >
-            I’m Nadun, a Computer Hardware and Network Technician with a passion
-            for technology, systems, and creative problem-solving.
-            <br />
-            <br />
-            I work across hardware, networking, web development, AI, automation,
-            psychology, and marketing.
+          <p className={cyber ? "text-purple-200" : "text-gray-700"}>
+            I’m Nadun, a Computer Hardware and Network Technician passionate about
+            systems, networking, AI, and creative problem-solving.
           </p>
 
-          <p className={cyber ? "text-purple-300" : "text-gray-600"}>
-            📧 imnadunadm@gmail.com
-          </p>
-        </div>
+          <p>📧 imnadunadm@gmail.com</p>
+        </Reveal>
 
-        {/* RIGHT – IMAGE GRID */}
+        {/* Image grid */}
         <div className="grid grid-cols-2 gap-4">
           {images.map((src, i) => (
-            <div
+            <motion.div
               key={i}
-              className={`rounded-2xl overflow-hidden transition duration-500 hover:scale-105 ${
-                cyber
-                  ? "border border-purple-400 shadow-lg shadow-pink-500/50"
-                  : "shadow-lg"
+              whileHover={{ scale: 1.05 }}
+              className={`rounded-2xl overflow-hidden shadow-lg ${
+                cyber ? "border border-purple-400" : ""
               }`}
             >
-              <img
-                src={src}
-                alt={`photo ${i + 1}`}
-                className="object-cover w-full h-full"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* SKILLS */}
-      <section className="max-w-6xl mx-auto px-6 my-16">
-        <h2 className={`text-3xl font-bold mb-6 ${cyber ? "text-pink-400" : ""}`}>
-          My Skills
-        </h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {[
-            "Computer Hardware",
-            "Networking",
-            "Web Development",
-            "AI & Automation",
-            "CCTV Systems",
-            "Marketing",
-            "Creative Writing",
-            "Communication",
-          ].map((skill, i) => (
-            <div
-              key={i}
-              className={`p-4 rounded-xl text-center font-medium transition hover:scale-105 ${
-                cyber
-                  ? "bg-purple-800 text-purple-200 shadow-pink-500/40 shadow-lg"
-                  : "bg-gray-100 shadow-md"
-              }`}
-            >
-              {skill}
-            </div>
+              <img src={src} alt={`photo ${i + 1}`} className="w-full h-full object-cover" />
+            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* CV */}
-      <section className="text-center my-16">
-        <h2 className={`text-3xl font-bold mb-6 ${cyber ? "text-pink-400" : ""}`}>
-          Download My CV
-        </h2>
-
-        <a
-          href="/Nadun_Pasindu_Dhananjaya_CV.pdf"
-          download
-          className={`inline-block px-6 py-3 rounded-full font-medium shadow-lg transition ${
-            cyber
-              ? "bg-purple-700 hover:bg-pink-500 text-white"
-              : "bg-indigo-600 hover:bg-indigo-700 text-white"
-          }`}
-        >
-          Download CV
-        </a>
-      </section>
-
-      {/* 🎥 YOUTUBE PLAYLIST PLAYER */}
-      <div className="max-w-4xl mx-auto my-20 aspect-video rounded-2xl overflow-hidden shadow-lg">
-        <iframe
-          className="w-full h-full"
-          src="https://www.youtube.com/embed?listType=playlist&list=PLIT7sCYKC00PQqzvbI-O0caw4H8yoPRPY&si=UexRCqvThzkkvxo8"
-          title="YouTube playlist player"
-          allowFullScreen
-        ></iframe>
-      </div>
-
-      {/* FLOATING CONTACT */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
-        <a
-          href="https://wa.me/94759080516"
-          target="_blank"
-          className="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full shadow-lg"
-        >
-          WhatsApp
-        </a>
-
-        <a
-          href="https://www.youtube.com/@nadunadm"
-          target="_blank"
-          className="bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-full shadow-lg"
-        >
-          YouTube
-        </a>
-      </div>
-
-      {/* FOOTER */}
-      <footer
-        className={`py-6 text-center mt-20 ${
-          cyber ? "bg-purple-900 text-pink-400" : "bg-gray-100 text-gray-700"
+      {/* LINKEDIN */}
+      {/* LINKEDIN FEED SECTION */}
+<section className="relative z-10 max-w-6xl mx-auto px-6 my-20">
+  <Reveal>
+    <div
+      className={`p-6 md:p-8 rounded-2xl shadow-lg ${
+        cyber
+          ? "bg-purple-800/50 border border-purple-500/40"
+          : "bg-white"
+      }`}
+    >
+      <h2
+        className={`text-3xl font-bold mb-2 ${
+          cyber ? "text-pink-400" : ""
         }`}
       >
-        © 2026 Nadun ADM — Computer Hardware & Network Technician.
+        LinkedIn Feed
+      </h2>
+
+      <p className={cyber ? "text-purple-200 mb-4" : "text-gray-600 mb-4"}>
+        My professional profile and latest activity on LinkedIn.
+      </p>
+
+      {/* CLICKABLE PROFILE LINK */}
+      <a
+        href="https://www.linkedin.com/in/nadun-dhananjaya-3a4702296/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`inline-flex items-center gap-2 mb-6 px-5 py-2 rounded-full font-medium transition ${
+          cyber
+            ? "bg-blue-500 hover:bg-blue-600 text-white"
+            : "bg-blue-600 hover:bg-blue-700 text-white"
+        }`}
+      >
+        Visit my LinkedIn Profile →
+      </a>
+
+      {/* OFFICIAL LINKEDIN FEED (BADGE) */}
+      <div className="mt-6">
+        <LinkedInBadge
+          vanity="nadun-dhananjaya-3a4702296"
+          theme={cyber ? "dark" : "light"}
+        />
+      </div>
+    </div>
+  </Reveal>
+</section>
+{/* CV DOWNLOAD */}
+<section className="relative z-10 max-w-4xl mx-auto px-6 my-20">
+  <Reveal>
+    <div
+      className={`p-8 rounded-2xl shadow-lg text-center ${
+        cyber
+          ? "bg-purple-800/50 border border-purple-500/40"
+          : "bg-white"
+      }`}
+    >
+      <h2 className={`text-3xl font-bold mb-3 ${cyber ? "text-pink-400" : ""}`}>
+        Download My CV
+      </h2>
+
+      <p className={cyber ? "text-purple-200 mb-6" : "text-gray-600 mb-6"}>
+        A quick overview of my skills, experience, and technical background.
+      </p>
+
+      <a
+        href="/Nadun_CV.pdf"
+        download
+        className={`inline-block px-8 py-3 rounded-full font-semibold transition transform hover:scale-105 ${
+          cyber
+            ? "bg-pink-500 hover:bg-purple-500 text-white"
+            : "bg-indigo-600 hover:bg-indigo-700 text-white"
+        }`}
+      >
+        Download CV ↓
+      </a>
+    </div>
+  </Reveal>
+</section>
+
+
+
+      {/* YOUTUBE PLAYLIST */}
+      <section className="relative z-10 max-w-6xl mx-auto px-6 my-20">
+        <Reveal>
+          <div className={`p-6 rounded-2xl shadow-lg ${
+            cyber ? "bg-purple-800/50 border border-purple-500/40" : "bg-white"
+          }`}>
+            <h2 className={`text-3xl font-bold mb-4 ${cyber ? "text-pink-400" : ""}`}>
+             AI RAP SONGS LYRICS BY ME
+            </h2>
+
+            <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed?listType=playlist&list=PLIT7sCYKC00PQqzvbI-O0caw4H8yoPRPY"
+                title="YouTube playlist"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* FOOTER */}
+      <footer className={`text-center py-6 ${
+        cyber ? "bg-purple-900 text-pink-400" : "bg-gray-100 text-gray-700"
+      }`}>
+        © 2026 Nadun ADM
       </footer>
     </main>
   );
