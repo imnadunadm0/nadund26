@@ -31,11 +31,17 @@ export const metadata = {
 
 import "./globals.css";
 import { PropsWithChildren } from "react";
+import Preloader from "./components/Preloader";
+import FloatingAudio from "./components/FloatingAudio";
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className="bg-white text-gray-900">{children}</body>
+      <body className="bg-white text-gray-900 transition-colors duration-500 selection:bg-indigo-500 selection:text-white">
+        <Preloader />
+        <FloatingAudio />
+        {children}
+      </body>
     </html>
   );
 }
