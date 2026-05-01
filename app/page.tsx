@@ -337,7 +337,7 @@ export default function Home() {
           <div className={`p-8 md:p-12 rounded-[2.5rem] relative overflow-hidden shadow-2xl transition-all ${
             cyber ? "border-2 border-fuchsia-500/30 bg-black/40 backdrop-blur-xl" : "bg-white border-none"
           }`}>
-            <div className={`absolute inset-0 opacity-20 ${
+            <div className={`absolute inset-0 pointer-events-none opacity-20 ${
               cyber ? "bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-fuchsia-900 via-transparent to-transparent" : "bg-gradient-to-br from-red-50 to-orange-50"
             }`} />
             
@@ -355,12 +355,12 @@ export default function Home() {
               </p>
             </div>
 
-            <div className={`aspect-video rounded-3xl overflow-hidden shadow-2xl transition-all hover:scale-[1.01] ${
+            <div className={`relative z-10 aspect-video rounded-3xl overflow-hidden shadow-2xl transition-all hover:scale-[1.01] ${
               cyber ? "ring-2 ring-fuchsia-500/40 shadow-fuchsia-900/30" : "ring-1 ring-gray-200"
             }`}>
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed?listType=playlist&list=PLIT7sCYKC00PQqzvbI-O0caw4H8yoPRPY"
+                src="https://www.youtube.com/embed/videoseries?list=PLIT7sCYKC00PQqzvbI-O0caw4H8yoPRPY"
                 title="Nadun's AI Rap Playlist"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
